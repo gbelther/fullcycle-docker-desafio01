@@ -1,0 +1,17 @@
+FROM golang:alpine AS builder
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN go mod download
+
+RUN go build -o /usr/src/app/fullcycle
+
+FROM scratch
+
+WORKDIR /usr/src/app
+
+COPY --from=builder /usr/src/app/fullcycle .
+
+CMD ["/usr/src/app/fullcycle"]
